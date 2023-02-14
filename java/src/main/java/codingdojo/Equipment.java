@@ -33,4 +33,20 @@ class Equipment {
     Item getChest() {
         return chest;
     }
+
+    int getBaseDamage() {
+        return leftHand.getBaseDamage() +
+                rightHand.getBaseDamage() +
+                head.getBaseDamage() +
+                feet.getBaseDamage() +
+                chest.getBaseDamage();
+    }
+
+    float getDamageModifier() {
+        return leftHand.getDamageModifier() +
+                rightHand.getDamageModifier() +
+                head.getDamageModifier() +
+                feet.getDamageModifier() +
+                chest.getDamageModifier();
+    }
 }
