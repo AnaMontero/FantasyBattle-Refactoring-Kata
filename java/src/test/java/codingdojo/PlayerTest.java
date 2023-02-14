@@ -18,6 +18,7 @@ public class PlayerTest {
 
         when(inventory.getEquipment()).thenReturn(equipment);
         when(equipment.getBaseDamage()).thenReturn(10);
+        when(equipment.getDamageModifier()).thenReturn(1F);
 
         Damage damage = new Player(inventory, stats).calculateDamage(target);
         assertEquals(10, damage.getAmount());
