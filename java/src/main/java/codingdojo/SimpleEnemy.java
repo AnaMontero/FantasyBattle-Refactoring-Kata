@@ -21,4 +21,11 @@ public class SimpleEnemy extends Target {
     Armor getArmor() {
         return this.armor;
     }
+
+    int getSoak(int totalDamage) {
+        Armor armor = getArmor();
+        int armorSoak = Math.round(armor.getDamageSoak());
+        float buffModifier = 1 + (float) getBuffs().stream().mapToDouble(Buff::soakModifier).sum();
+        return Math.round(armorSoak * buffModifier);
+    }
 }
