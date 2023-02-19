@@ -10,4 +10,8 @@ public class Inventory {
     Equipment getEquipment() {
         return equipment;
     }
+
+    int getBaseDamage() {
+        return equipment.getBaseDamage();
+    }
 }

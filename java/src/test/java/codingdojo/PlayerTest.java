@@ -30,7 +30,7 @@ public class PlayerTest {
     void damageCalculationsShouldReturnTen() {
 
         when(inventory.getEquipment()).thenReturn(equipment);
-        when(equipment.getBaseDamage()).thenReturn(10);
+        when(inventory.getBaseDamage()).thenReturn(10);
         when(equipment.getDamageModifier()).thenReturn(1.0F);
 
         damage = new Player(inventory, stats).calculateDamage(target);
@@ -41,7 +41,7 @@ public class PlayerTest {
     void damageCalculationsShouldReturnZero() {
 
         when(inventory.getEquipment()).thenReturn(equipment);
-        when(equipment.getBaseDamage()).thenReturn(0);
+        when(inventory.getBaseDamage()).thenReturn(0);
         when(equipment.getDamageModifier()).thenReturn(1.4F);
 
         damage = new Player(inventory, stats).calculateDamage(target);
@@ -52,7 +52,7 @@ public class PlayerTest {
     void damageCalculationsShouldNotReturnThirty() {
 
         when(inventory.getEquipment()).thenReturn(equipment);
-        when(equipment.getBaseDamage()).thenReturn(20);
+        when(inventory.getBaseDamage()).thenReturn(20);
         when(equipment.getDamageModifier()).thenReturn(1.0F);
 
         damage = new Player(inventory, stats).calculateDamage(target);
@@ -64,7 +64,7 @@ public class PlayerTest {
     void damageCalculationsShouldReturnZeroWhenSoakExceedsTotalDamage() {
 
         when(inventory.getEquipment()).thenReturn(equipment);
-        when(equipment.getBaseDamage()).thenReturn(10);
+        when(inventory.getBaseDamage()).thenReturn(10);
         when(equipment.getDamageModifier()).thenReturn(1.0F);
         when(target.getSoak(10)).thenReturn(20);
 
@@ -75,7 +75,7 @@ public class PlayerTest {
     @Test
     void damageCalculationsShouldReturnNonNegativeDamage() {
         when(inventory.getEquipment()).thenReturn(equipment);
-        when(equipment.getBaseDamage()).thenReturn(10);
+        when(inventory.getBaseDamage()).thenReturn(10);
         when(equipment.getDamageModifier()).thenReturn(0.5F);
         when(target.getSoak(5)).thenReturn(3);
 
@@ -88,7 +88,7 @@ public class PlayerTest {
     void damageCalculationsShouldApplyDamageModifierCorrectly(float modifier) {
 
         when(inventory.getEquipment()).thenReturn(equipment);
-        when(equipment.getBaseDamage()).thenReturn(10);
+        when(inventory.getBaseDamage()).thenReturn(10);
         when(equipment.getDamageModifier()).thenReturn(modifier);
         when(target.getSoak(10)).thenReturn(5);
 
