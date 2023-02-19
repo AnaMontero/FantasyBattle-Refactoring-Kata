@@ -1,5 +1,0 @@
-cmake-build-*
-.idea
-gtest
-build/
-IgnoreTest.cpp
