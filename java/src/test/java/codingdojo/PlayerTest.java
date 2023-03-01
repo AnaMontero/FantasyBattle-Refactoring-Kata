@@ -15,6 +15,7 @@ public class PlayerTest {
     SimpleEnemy target;
     Equipment equipment;
     Damage damage;
+    SimpleEnemy simpleEnemy;
 
     @BeforeEach
     public void setUp() {
@@ -22,11 +23,16 @@ public class PlayerTest {
         stats  = mock(Stats.class);
         target  = mock(SimpleEnemy.class);
         equipment = mock(Equipment.class);
+        simpleEnemy = mock(SimpleEnemy.class);
     }
 
     @ParameterizedTest
     @CsvSource({
-            "10, 0.6, 0.4, 0, 10"
+            "10, 0.6, 0.4, 0, 10",
+            "8, 1.0, 1.0, 5, 11",
+            "17, 0.4, 1.9, 20, 19",
+            "0, 0.6, 0.4, 1, 0",
+            "15, 1.0, 0.0, 20, 0",
     })
     void damageCalculationsShouldBeCorrectlyCalculated(int baseDamage, float equipmentDamageModifier, float statsDamageModifier, int soak, int expectedDamage) {
 
@@ -34,7 +40,8 @@ public class PlayerTest {
         when(inventory.getBaseDamage()).thenReturn(baseDamage);
         when(equipment.getDamageModifier()).thenReturn(equipmentDamageModifier);
         when(stats.getDamageModifier()).thenReturn(statsDamageModifier);
-        when(target.getSoak(baseDamage)).thenReturn(soak);
+        int totalDamage = Math.round(baseDamage * (equipmentDamageModifier + statsDamageModifier));
+        when(target.getSoak(totalDamage)).thenReturn(soak);
 
         damage = new Player(inventory, stats).calculateDamage(target);
         assertEquals(expectedDamage, damage.getAmount());
