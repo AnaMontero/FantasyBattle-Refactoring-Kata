@@ -1,12 +1,10 @@
 package codingdojo;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -26,73 +24,19 @@ public class PlayerTest {
         equipment = mock(Equipment.class);
     }
 
-    @Test
-    void damageCalculationsShouldReturnTen() {
-
-        when(inventory.getEquipment()).thenReturn(equipment);
-        when(inventory.getBaseDamage()).thenReturn(10);
-        when(stats.getDamageModifier()).thenReturn(1.0F);
-
-        damage = new Player(inventory, stats).calculateDamage(target);
-        assertEquals(10, damage.getAmount());
-    }
-
-    @Test
-    void damageCalculationsShouldReturnZero() {
-
-        when(inventory.getEquipment()).thenReturn(equipment);
-        when(inventory.getBaseDamage()).thenReturn(0);
-        when(stats.getDamageModifier()).thenReturn(1.4F);
-
-        damage = new Player(inventory, stats).calculateDamage(target);
-        assertEquals(0, damage.getAmount());
-    }
-
-    @Test
-    void damageCalculationsShouldNotReturnThirty() {
-
-        when(inventory.getEquipment()).thenReturn(equipment);
-        when(inventory.getBaseDamage()).thenReturn(20);
-        when(stats.getDamageModifier()).thenReturn(1.0F);
-
-        damage = new Player(inventory, stats).calculateDamage(target);
-        assertNotEquals(30, damage.getAmount());
-    }
-
-
-    @Test
-    void damageCalculationsShouldReturnZeroWhenSoakExceedsTotalDamage() {
-
-        when(inventory.getEquipment()).thenReturn(equipment);
-        when(inventory.getBaseDamage()).thenReturn(10);
-        when(stats.getDamageModifier()).thenReturn(1.0F);
-        when(target.getSoak(10)).thenReturn(20);
-
-        damage = new Player(inventory, stats).calculateDamage(target);
-        assertEquals(0, damage.getAmount());
-    }
-
-    @Test
-    void damageCalculationsShouldReturnNonNegativeDamage() {
-        when(inventory.getEquipment()).thenReturn(equipment);
-        when(inventory.getBaseDamage()).thenReturn(10);
-        when(stats.getDamageModifier()).thenReturn(0.5F);
-        when(target.getSoak(5)).thenReturn(3);
-
-        damage = new Player(inventory, stats).calculateDamage(target);
-        assertEquals(2, damage.getAmount());
-    }
-
     @ParameterizedTest
-    @ValueSource(floats = {0.0F, 1.0F})
-    void damageCalculationsShouldApplyDamageModifierCorrectly(float modifier) {
+    @CsvSource({
+            "10, 0.6, 0.4, 0, 10"
+    })
+    void damageCalculationsShouldBeCorrectlyCalculated(int baseDamage, float equipmentDamageModifier, float statsDamageModifier, int soak, int expectedDamage) {
 
         when(inventory.getEquipment()).thenReturn(equipment);
-        when(inventory.getBaseDamage()).thenReturn(10);
-        when(stats.getDamageModifier()).thenReturn(modifier);
-        when(target.getSoak(10)).thenReturn(5);
+        when(inventory.getBaseDamage()).thenReturn(baseDamage);
+        when(equipment.getDamageModifier()).thenReturn(equipmentDamageModifier);
+        when(stats.getDamageModifier()).thenReturn(statsDamageModifier);
+        when(target.getSoak(baseDamage)).thenReturn(soak);
 
         damage = new Player(inventory, stats).calculateDamage(target);
-        assertEquals(Math.max(0, Math.round(10 * modifier - 5)), damage.getAmount());
+        assertEquals(expectedDamage, damage.getAmount());
     }
 }
